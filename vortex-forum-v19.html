@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ForumPR</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-base:#0f1117;
+  --bg-surface:#181c27;
+  --bg-card:#1e2333;
+  --bg-input:#252a3a;
+  --bg-hover:#2a3045;
+  --border:#2e354f;
+  --border-light:#3a4260;
+  --text-primary:#e8eaf0;
+  --text-secondary:#8892a4;
+  --text-muted:#555f75;
+  --accent:#4f8ef7;
+  --accent-hover:#6ba3ff;
+  --online:#22c55e;
+  --badge-bg:#1e2a4a;
+  --logo:#4f8ef7;
+  --nav-active:#4f8ef7;
+  --stat-number:#e8eaf0;
+  --ad-bg:#1a1f2e;
+  --ad-border:#2a3145;
+  --post-btn:#4f8ef7;
+  --icon-btn:#8892a4;
+  --page-active-bg:#4f8ef7;
+  --page-text:#8892a4;
+  --transition:0.2s ease;
+  --like:#f43f5e;
+}
+[data-theme="light"]{
+  --bg-base:#f0f2f7;
+  --bg-surface:#ffffff;
+  --bg-card:#ffffff;
+  --bg-input:#f5f6fa;
+  --bg-hover:#eef0f8;
+  --border:#dde1ee;
+  --border-light:#c8cede;
+  --text-primary:#1a1f2e;
+  --text-secondary:#5a6480;
+  --text-muted:#9aa3bb;
+  --accent:#3b7de8;
+  --accent-hover:#2a6dd4;
+  --online:#16a34a;
+  --badge-bg:#e8f0fe;
+  --logo:#3b7de8;
+  --nav-active:#3b7de8;
+  --stat-number:#1a1f2e;
+  --ad-bg:#f8f9fd;
+  --ad-border:#dde1ee;
+  --post-btn:#3b7de8;
+  --icon-btn:#6b7a99;
+  --page-active-bg:#3b7de8;
+  --page-text:#6b7a99;
+  --like:#f43f5e;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg-base);color:var(--text-primary);min-height:100vh;font-size:14px;line-height:1.5;transition:background var(--transition),color var(--transition);}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit;font-size:inherit;color:inherit}
+
+/* NAVBAR */
+.navbar{display:flex;align-items:center;background:var(--bg-surface);border-bottom:1px solid var(--border);padding:0 24px;height:56px;position:sticky;top:0;z-index:100;transition:background var(--transition),border-color var(--transition);}
+.logo{font-size:18px;font-weight:600;color:var(--logo);min-width:160px;letter-spacing:-0.3px;}
+.nav-links{display:flex;align-items:center;gap:4px;flex:1;justify-content:center;}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:0 24px;height:56px;justify-content:center;color:var(--text-secondary);font-size:12px;font-weight:500;border-bottom:2px solid transparent;cursor:pointer;transition:color var(--transition),border-color var(--transition);position:relative;top:1px;}
+.nav-item:hover{color:var(--text-primary)}
+.nav-item.active{color:var(--nav-active);border-bottom-color:var(--nav-active)}
+.nav-svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-right{display:flex;align-items:center;gap:8px;min-width:160px;justify-content:flex-end}
+.icon-btn{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--icon-btn);transition:background var(--transition),color var(--transition);}
+.icon-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.toggle-btn{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--icon-btn);transition:background var(--transition),color var(--transition);}
+.toggle-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:180px 1fr 220px;gap:16px;max-width:1200px;margin:0 auto;padding:16px;}
+
+/* SIDEBAR LEFT */
+.sidebar-left{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:16px;height:fit-content;position:sticky;top:72px;transition:background var(--transition),border-color var(--transition);}
+.profile-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.profile-header-title{font-size:13px;font-weight:600;color:var(--text-secondary);letter-spacing:0.5px;text-transform:uppercase}
+.close-btn{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:14px;transition:background var(--transition);}
+.close-btn:hover{background:var(--bg-hover)}
+.avatar-wrap{display:flex;justify-content:center;margin-bottom:12px;position:relative;}
+.avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);overflow:hidden;border:2px solid var(--border-light);}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.online-dot{position:absolute;bottom:2px;right:calc(50% - 40px);width:12px;height:12px;border-radius:50%;background:var(--online);border:2px solid var(--bg-card);}
+.profile-name{text-align:center;font-size:15px;font-weight:600;margin-bottom:2px}
+.profile-handle{text-align:center;font-size:12px;color:var(--text-secondary);margin-bottom:10px}
+.profile-badge{display:block;text-align:center;margin:0 auto 14px;width:fit-content;padding:3px 14px;border-radius:20px;border:1px solid var(--border-light);font-size:11px;font-weight:500;color:var(--text-secondary);}
+.profile-stats{border-top:1px solid var(--border);padding-top:12px;display:flex;flex-direction:column;gap:8px;}
+.stat-row{display:flex;flex-direction:column;gap:1px}
+.stat-label{font-size:11px;color:var(--text-muted)}
+.stat-val{font-size:12px;font-weight:500;color:var(--text-primary)}
+.profile-bio{font-size:11px;color:var(--text-secondary);line-height:1.6;margin:10px 0;border-top:1px solid var(--border);padding-top:10px;}
+.view-profile-btn{display:block;width:100%;padding:7px 0;border:1px solid var(--border-light);border-radius:6px;text-align:center;font-size:12px;font-weight:500;color:var(--text-secondary);transition:background var(--transition),color var(--transition),border-color var(--transition);}
+.view-profile-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
+
+/* PAGE SECTIONS */
+.page-section{display:none}
+.page-section.active{display:block}
+
+/* POST BOX */
+.post-box{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:14px;transition:background var(--transition),border-color var(--transition);}
+.post-input{width:100%;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--text-secondary);font-size:13px;font-family:inherit;margin-bottom:10px;outline:none;transition:background var(--transition),border-color var(--transition);}
+.post-input::placeholder{color:var(--text-muted)}
+.post-input:focus{border-color:var(--border-light);background:var(--bg-hover)}
+.post-actions{display:flex;align-items:center;gap:6px}
+.post-action-btn{display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:6px;color:var(--text-secondary);font-size:12px;font-weight:500;transition:background var(--transition),color var(--transition);}
+.post-action-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.post-action-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.post-submit{margin-left:auto;padding:6px 18px;background:var(--post-btn);color:#fff;border-radius:6px;font-size:13px;font-weight:500;transition:opacity var(--transition);}
+.post-submit:hover{opacity:0.88}
+
+/* FORUM TABLE */
+.forum-table{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:10px;transition:background var(--transition),border-color var(--transition);}
+.forum-section-head{display:grid;grid-template-columns: 1fr 72px 72px 160px;padding:7px 14px;border-bottom:1px solid var(--border);background:var(--bg-input);align-items:center;}
+.fsh-label{font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:0.8px;text-transform:uppercase;}
+.fsh-col{font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:0.8px;text-transform:uppercase;text-align:center;}
+.fsh-col.right{text-align:right}
+.forum-section-row{display:grid;grid-template-columns: 1fr 72px 72px 160px;padding:6px 14px;background:var(--bg-input);border-bottom:1px solid var(--border);border-top:1px solid var(--border);align-items:center;}
+.forum-section-label{font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:0.8px;text-transform:uppercase;display:flex;align-items:center;gap:6px;grid-column: 1 / -1;}
+.forum-section-label::after{content:'';flex:1;height:1px;background:var(--border-light);opacity:0.5;}
+.forum-row{display:grid;grid-template-columns: 1fr 72px 72px 160px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);}
+.forum-row:last-child{border-bottom:none}
+.forum-row:hover{background:var(--bg-hover)}
+.forum-topic-cell{display:flex;align-items:center;gap:10px;min-width:0;}
+.forum-icon{width:32px;height:32px;border-radius:8px;background:var(--bg-input);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.forum-icon svg{width:14px;height:14px;stroke:var(--text-secondary);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.forum-topic-body{min-width:0;flex:1;}
+.forum-title-row{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+.forum-title{font-size:13px;font-weight:600;color:var(--accent);}
+.forum-title:hover{color:var(--accent-hover)}
+.blue-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+@keyframes blink-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(0.7)}}
+.blue-dot.blink{animation:blink-dot 1.2s ease-in-out infinite;}
+.forum-pages-row{display:flex;align-items:center;gap:3px;flex-wrap:wrap;}
+.page-btn{min-width:20px;height:20px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--page-text);background:var(--bg-input);padding:0 4px;transition:background var(--transition),color var(--transition);}
+.page-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.page-btn.active-page{background:var(--page-active-bg);color:#fff}
+.page-dots{font-size:10px;color:var(--text-muted)}
+.jump-link{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:500;color:var(--text-secondary);background:var(--bg-input);border-radius:4px;padding:0 6px;height:20px;transition:background var(--transition),color var(--transition);}
+.jump-link:hover{background:var(--bg-hover);color:var(--text-primary)}
+.jump-link svg{width:8px;height:8px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.forum-stat-cell{text-align:center;}
+.forum-stat-num{font-size:13px;font-weight:600;color:var(--text-primary);}
+.forum-lastpost-cell{text-align:right;padding-left:8px;}
+.lp-by{font-size:11px;color:var(--text-muted);}
+.lp-name{font-size:12px;font-weight:600;color:var(--accent);}
+.lp-date{font-size:10px;color:var(--text-muted);margin-top:1px;}
+
+/* BANNER SLIDER */
+.banner-slider{position:relative;border-radius:12px;overflow:hidden;margin-bottom:14px;height:150px;}
+.banner-track{display:flex;transition:transform 0.45s cubic-bezier(.4,0,.2,1);height:100%;}
+.banner-slide{min-width:100%;height:150px;display:flex;align-items:center;padding:0 28px;position:relative;overflow:hidden;flex-shrink:0;}
+.banner-content{flex:1;z-index:1;}
+.banner-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:0.6px;text-transform:uppercase;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.1);border-radius:4px;padding:2px 8px;margin-bottom:8px;}
+.banner-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.2;}
+.banner-desc{font-size:12px;color:rgba(255,255,255,0.65);margin-bottom:12px;line-height:1.5;max-width:340px;}
+.banner-cta{padding:6px 18px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);color:#fff;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;transition:background 0.2s;}
+.banner-cta:hover{background:rgba(255,255,255,0.25)}
+.banner-deco{position:absolute;right:28px;font-size:72px;opacity:0.18;line-height:1;pointer-events:none;user-select:none;}
+.banner-arrow{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.15);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;transition:background 0.2s;}
+.banner-arrow:hover{background:rgba(0,0,0,0.55)}
+.banner-prev{left:10px}
+.banner-next{right:10px}
+.banner-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:2;}
+.banner-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.35);cursor:pointer;transition:background 0.2s,width 0.2s;display:inline-block;}
+.banner-dot.active{background:#fff;width:18px;border-radius:3px;}
+
+/* THREAD TOPBAR */
+.thread-topbar{display:flex;align-items:center;justify-content:space-between;margin-top:10px;margin-bottom:6px;gap:10px;}
+.thread-pagination{display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+
+/* NEW TOPIC BUTTON */
+.new-topic-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;background:var(--post-btn);color:#fff;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity var(--transition);border:none;}
+.new-topic-btn:hover{opacity:0.88}
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap;}
+.bc-btn{font-size:12px;font-weight:500;color:var(--accent);background:none;border:none;cursor:pointer;padding:0;transition:color var(--transition);}
+.bc-btn:hover{color:var(--accent-hover)}
+.bc-sep{font-size:12px;color:var(--text-muted)}
+.bc-cur{font-size:12px;color:var(--text-muted)}
+
+/* SEASON TABS */
+.season-tab{flex:1;text-align:center;padding:10px 0;font-size:13px;font-weight:500;color:var(--text-muted);border-bottom:2px solid transparent;cursor:pointer;transition:color var(--transition),border-color var(--transition),background var(--transition);}
+.season-tab:hover{color:var(--text-primary);background:var(--bg-hover)}
+.season-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* PAGINATION */
+.pagination-bar{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:12px;padding:8px 0;}
+.pag-btn{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary);font-size:12px;transition:background var(--transition),color var(--transition),border-color var(--transition);}
+.pag-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.pag-btn.active{background:var(--page-active-bg);color:#fff;border-color:var(--page-active-bg)}
+.jump-dropdown{display:flex;align-items:center;gap:6px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:0 10px;height:30px;font-size:12px;color:var(--text-secondary);cursor:pointer;transition:background var(--transition),border-color var(--transition);}
+.jump-dropdown svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;display:block;flex-shrink:0;}
+
+/* HOME FEED */
+.feed-tabs{display:flex;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px;}
+.feed-tab{flex:1;text-align:center;padding:10px 0;font-size:13px;font-weight:500;color:var(--text-muted);border-bottom:2px solid transparent;cursor:pointer;transition:color var(--transition),border-color var(--transition),background var(--transition);}
+.feed-tab:hover{color:var(--text-primary);background:var(--bg-hover)}
+.feed-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.feed-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:background var(--transition),border-color var(--transition);}
+.feed-card:hover{background:var(--bg-hover)}
+.feed-card-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.feed-avatar{width:38px;height:38px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid var(--border-light);}
+.feed-avatar img{width:100%;height:100%;object-fit:cover}
+.feed-meta{flex:1;min-width:0}
+.feed-name{font-size:13px;font-weight:600;color:var(--text-primary)}
+.feed-handle-time{font-size:11px;color:var(--text-muted);margin-top:1px}
+.feed-handle-time span{color:var(--text-secondary)}
+.feed-more{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:background var(--transition),color var(--transition);}
+.feed-more:hover{background:var(--bg-hover);color:var(--text-primary)}
+.feed-more svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.feed-type-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:0.4px;text-transform:uppercase;margin-bottom:8px;}
+.badge-blog{background:#1e3a2a;color:#4ade80}
+.badge-update{background:#1e2a4a;color:#60a5fa}
+.badge-discussion{background:#3a1e2a;color:#f472b6}
+.feed-content{font-size:13px;color:var(--text-primary);line-height:1.65;margin-bottom:10px}
+.feed-content strong{font-weight:600}
+.feed-blog-preview{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;transition:border-color var(--transition);}
+.feed-blog-preview:hover{border-color:var(--border-light)}
+.feed-blog-img{width:100%;height:110px;background:linear-gradient(135deg,var(--bg-input),var(--bg-hover));display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.feed-blog-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text-muted);}
+.feed-blog-meta{padding:10px 12px}
+.feed-blog-title{font-size:13px;font-weight:600;margin-bottom:3px}
+.feed-blog-desc{font-size:11px;color:var(--text-muted);line-height:1.5}
+.feed-blog-source{font-size:10px;color:var(--accent);margin-top:6px}
+.feed-actions{display:flex;align-items:center;padding-top:8px;border-top:1px solid var(--border);margin-top:2px;}
+.feed-action{display:flex;align-items:center;gap:5px;padding:5px 12px 5px 0;border-radius:6px;font-size:12px;color:var(--text-muted);transition:color var(--transition);flex:1;}
+.feed-action:hover{color:var(--text-primary)}
+.feed-action.liked{color:var(--like)}
+.feed-action svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.feed-action.liked svg{fill:var(--like);stroke:var(--like)}
+.feed-share{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:background var(--transition),color var(--transition);}
+.feed-share:hover{background:var(--bg-hover);color:var(--text-primary)}
+.feed-share svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* SIDEBAR RIGHT */
+.sidebar-right{display:flex;flex-direction:column;gap:12px;position:sticky;top:72px;height:fit-content;}
+.side-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:background var(--transition),border-color var(--transition);}
+.side-card-header{padding:8px 14px;font-size:10px;font-weight:600;color:var(--text-muted);letter-spacing:0.8px;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.ad-box{height:100px;display:flex;align-items:center;justify-content:center;background:var(--ad-bg);color:var(--text-muted);font-size:12px;margin:12px;border-radius:6px;border:1px dashed var(--ad-border);}
+.forum-stats-list{padding:10px 14px;display:flex;flex-direction:column;}
+.fs-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.fs-row:last-child{border-bottom:none}
+.fs-label{color:var(--text-secondary)}
+.fs-val{font-weight:600;color:var(--stat-number)}
+.fs-val.online-val{color:var(--online)}
+.sponsored-box{height:160px;display:flex;align-items:center;justify-content:center;background:var(--ad-bg);color:var(--text-muted);font-size:12px;margin:12px;border-radius:6px;border:1px dashed var(--ad-border);}
+.trending-list{padding:10px 14px;display:flex;flex-direction:column;}
+.trending-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:color var(--transition);}
+.trending-item:last-child{border-bottom:none}
+.trending-item:hover .trending-tag{color:var(--accent-hover)}
+.trending-num{font-size:11px;color:var(--text-muted);font-weight:600;min-width:14px}
+.trending-info{flex:1}
+.trending-tag{font-size:12px;font-weight:600;color:var(--accent)}
+.trending-count{font-size:10px;color:var(--text-muted);margin-top:1px}
+.chevron-down{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:block;flex-shrink:0;}
+
+/* PROFILE PAGE */
+.profile-cover{height:130px;border-radius:12px 12px 0 0;background:linear-gradient(135deg,#1a2a5a 0%,#2d1b6b 40%,#1a3a4a 100%);position:relative;overflow:hidden;}
+.profile-cover-pattern{position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(79,142,247,0.25) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(167,139,250,0.2) 0%,transparent 40%);}
+.profile-cover-emoji{position:absolute;right:24px;bottom:14px;font-size:52px;opacity:0.18;line-height:1;pointer-events:none;}
+.profile-main-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;transition:background var(--transition),border-color var(--transition);}
+.profile-identity{padding:0 20px 18px;position:relative;}
+.profile-big-avatar{width:80px;height:80px;border-radius:50%;border:3px solid var(--bg-card);background:linear-gradient(135deg,#667eea,#764ba2);overflow:hidden;position:relative;top:-36px;margin-bottom:-20px;transition:border-color var(--transition);}
+.profile-big-avatar img{width:100%;height:100%;object-fit:cover}
+.profile-big-online{width:14px;height:14px;border-radius:50%;background:var(--online);border:2.5px solid var(--bg-card);position:absolute;bottom:4px;right:4px;}
+.profile-top-row{display:flex;align-items:flex-start;justify-content:space-between;margin-top:4px;}
+.profile-big-name{font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:2px;}
+.profile-big-handle{font-size:12px;color:var(--text-muted);}
+.profile-badges-row{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap;}
+.pbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;letter-spacing:0.4px;padding:3px 9px;border-radius:20px;}
+.pbadge-admin{background:#1e2a4a;color:#60a5fa;border:1px solid #2a3a6a;}
+.pbadge-verified{background:#1e3a2a;color:#4ade80;border:1px solid #2a4a3a;}
+.pbadge-dev{background:#2a1e3a;color:#c084fc;border:1px solid #3a2a4a;}
+.profile-edit-btn{display:flex;align-items:center;gap:6px;padding:7px 16px;border:1px solid var(--border-light);border-radius:8px;font-size:12px;font-weight:600;color:var(--text-secondary);cursor:pointer;transition:background var(--transition),color var(--transition);background:none;white-space:nowrap;}
+.profile-edit-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.profile-edit-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.profile-bio-text{font-size:13px;color:var(--text-secondary);line-height:1.65;margin:12px 0;}
+.profile-meta-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--text-muted);margin-bottom:14px;}
+.profile-meta-item{display:flex;align-items:center;gap:5px;}
+.profile-meta-item svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.profile-follow-row{display:flex;align-items:center;gap:20px;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.pf-stat{display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;}
+.pf-stat:hover .pf-num{color:var(--accent)}
+.pf-num{font-size:16px;font-weight:700;color:var(--text-primary);transition:color var(--transition);}
+.pf-label{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
+.pf-divider{width:1px;height:28px;background:var(--border);}
+.profile-strip{display:grid;grid-template-columns:repeat(4,1fr);background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;transition:background var(--transition),border-color var(--transition);}
+.pstrip-item{padding:14px 10px;text-align:center;border-right:1px solid var(--border);}
+.pstrip-item:last-child{border-right:none}
+.pstrip-val{font-size:18px;font-weight:700;color:var(--accent);}
+.pstrip-lbl{font-size:10px;color:var(--text-muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.profile-tabs{display:flex;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;transition:background var(--transition),border-color var(--transition);}
+.profile-tab{flex:1;text-align:center;padding:10px 0;font-size:12px;font-weight:600;color:var(--text-muted);border-bottom:2px solid transparent;cursor:pointer;transition:color var(--transition),border-color var(--transition),background var(--transition);text-transform:uppercase;letter-spacing:0.5px;}
+.profile-tab:hover{color:var(--text-primary);background:var(--bg-hover)}
+.profile-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.activity-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:background var(--transition),border-color var(--transition);}
+.activity-title{font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px;}
+.heatmap{display:flex;gap:3px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;}
+.hm-col{display:flex;flex-direction:column;gap:3px;}
+.hm-cell{width:10px;height:10px;border-radius:2px;background:var(--bg-input);flex-shrink:0;transition:background var(--transition);}
+.pinned-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;transition:background var(--transition),border-color var(--transition);}
+.pinned-label{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.pinned-label svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">ForumPR</div>
+  <div class="nav-links">
+    <div class="nav-item active" id="nav-home" onclick="switchPage('home')">
+      <svg class="nav-svg" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </div>
+    <div class="nav-item" id="nav-forum" onclick="switchPage('forum')">
+      <svg class="nav-svg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      Forum
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="icon-btn">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button class="toggle-btn" onclick="toggleTheme()">
+      <svg id="moonIcon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      <svg id="sunIcon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+    <button class="icon-btn">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <aside class="sidebar-left">
+    <div class="profile-header">
+      <span class="profile-header-title">Profile</span>
+      <button class="close-btn">✕</button>
+    </div>
+    <div class="avatar-wrap" onclick="openPage('profile')" style="cursor:pointer">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/8.x/notionists/svg?seed=budiprasetyo&backgroundColor=b6e3f4" alt="Budi Prasetyo" onerror="this.style.display='none'">
+      </div>
+      <div class="online-dot"></div>
+    </div>
+    <div class="profile-name" onclick="openPage('profile')" style="cursor:pointer">Budi Prasetyo</div>
+    <div class="profile-handle">@budiprasetyo</div>
+    <span class="profile-badge">Administrator</span>
+    <div class="profile-stats">
+      <div class="stat-row"><span class="stat-label">Member since</span><span class="stat-val">Jan 10, 2020</span></div>
+      <div class="stat-row"><span class="stat-label">Location</span><span class="stat-val">Jakarta, Indonesia</span></div>
+      <div class="stat-row"><span class="stat-label">Posts</span><span class="stat-val">1,234</span></div>
+      <div class="stat-row"><span class="stat-label">Reputation</span><span class="stat-val">8,567</span></div>
+    </div>
+    <div class="profile-bio">Web developer and forum enthusiast. I love sharing knowledge and helping others.</div>
+    <a class="view-profile-btn" onclick="openPage('profile')" style="cursor:pointer">View Full Profile</a>
+  </aside>
+
+  <main class="main">
+
+    <!-- ===== PAGE HOME ===== -->
+    <div class="page-section active" id="page-home">
+      <div class="post-box">
+        <input type="text" class="post-input" placeholder="What's on your mind?">
+        <div class="post-actions">
+          <button class="post-action-btn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Image</button>
+          <button class="post-action-btn"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Poll</button>
+          <button class="post-action-btn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>More</button>
+          <button class="post-submit">Post</button>
+        </div>
+      </div>
+      <div class="feed-tabs">
+        <div class="feed-tab active" onclick="switchHomeTab(this,'tab-all')">All</div>
+        <div class="feed-tab" onclick="switchHomeTab(this,'tab-blogs')">Blogs</div>
+        <div class="feed-tab" onclick="switchHomeTab(this,'tab-updates')">Updates</div>
+        <div class="feed-tab" onclick="switchHomeTab(this,'tab-messages')">Messages</div>
+      </div>
+
+      <!-- TAB ALL -->
+      <div id="tab-all">
+        <div class="feed-card">
+          <div class="feed-card-header">
+            <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=rizkyfauzi&backgroundColor=c0aede" alt=""></div>
+            <div class="feed-meta"><div class="feed-name">Rizky Fauzi</div><div class="feed-handle-time"><span>@rizkyfauzi</span> · 14 min ago</div></div>
+            <button class="feed-more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+          </div>
+          <span class="feed-type-badge badge-blog"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Blog</span>
+          <div class="feed-content">Just wrote a new article on how to properly optimize React performance using useMemo and useCallback. A lot of people misunderstand this!</div>
+          <div class="feed-blog-preview">
+            <div class="feed-blog-img"><div class="feed-blog-img-placeholder" style="background:linear-gradient(135deg,#1a2a4a,#2a1a4a);color:#4f8ef7;font-size:13px;font-weight:600;">⚛️ React Performance Guide</div></div>
+            <div class="feed-blog-meta">
+              <div class="feed-blog-title">The Right Way to Use useMemo &amp; useCallback in React 2024</div>
+              <div class="feed-blog-desc">A complete guide to React performance optimization — when to use it, when not to, and real-world examples.</div>
+              <div class="feed-blog-source">forumpr.id/blog/rizky · 8 min read</div>
+            </div>
+          </div>
+          <div class="feed-actions">
+            <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>48</span></button>
+            <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>12</span></button>
+            <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+            <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+            <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-card-header">
+            <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=forumprteam&backgroundColor=ffd5dc" alt=""></div>
+            <div class="feed-meta"><div class="feed-name">ForumPR Team <span style="font-size:10px;color:var(--accent);background:var(--badge-bg);padding:1px 6px;border-radius:4px;margin-left:4px;font-weight:600;">OFFICIAL</span></div><div class="feed-handle-time"><span>@forumprteam</span> · 1h ago</div></div>
+            <button class="feed-more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+          </div>
+          <span class="feed-type-badge badge-update"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg> Update</span>
+          <div class="feed-content"><strong>Forum Update v2.4.0 is now live!</strong><br><br>✅ Dark mode saved automatically<br>✅ Real-time reply notifications<br>✅ Markdown editor in post composer<br>✅ Bug fix on mobile profile page</div>
+          <div class="feed-actions">
+            <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>204</span></button>
+            <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>37</span></button>
+            <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+            <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+            <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-card-header">
+            <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=hendrakurniawan&backgroundColor=ffdfba" alt=""></div>
+            <div class="feed-meta"><div class="feed-name">Hendra Kurniawan</div><div class="feed-handle-time"><span>@hendrak</span> · 3h ago</div></div>
+            <button class="feed-more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+          </div>
+          <span class="feed-type-badge badge-blog"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Blog</span>
+          <div class="feed-content">Just wrote a long review of my new home office setup. Spent around 8 million but totally worth it for full-time WFH.</div>
+          <div class="feed-blog-preview">
+            <div class="feed-blog-img"><div class="feed-blog-img-placeholder" style="background:linear-gradient(135deg,#1a2e1a,#2e2a1a);color:#4ade80;font-size:13px;font-weight:600;">🖥️ Home Office Setup 2024</div></div>
+            <div class="feed-blog-meta">
+              <div class="feed-blog-title">Home Office Setup on 8 Million Budget — Worth It?</div>
+              <div class="feed-blog-desc">Full review of ultrawide monitor, electric desk, ergonomic chair, and WFH accessories.</div>
+              <div class="feed-blog-source">forumpr.id/blog/hendra · 12 min read</div>
+            </div>
+          </div>
+          <div class="feed-actions">
+            <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>76</span></button>
+            <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>19</span></button>
+            <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+            <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+            <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB BLOGS -->
+      <div id="tab-blogs" style="display:none">
+        <div class="feed-card">
+          <div class="feed-card-header">
+            <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=rizkyfauzi&backgroundColor=c0aede" alt=""></div>
+            <div class="feed-meta"><div class="feed-name">Rizky Fauzi</div><div class="feed-handle-time"><span>@rizkyfauzi</span> · 14 min ago</div></div>
+            <button class="feed-more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+          </div>
+          <span class="feed-type-badge badge-blog"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Blog</span>
+          <div class="feed-content">Just wrote a new article on how to properly optimize React performance using useMemo and useCallback. A lot of people misunderstand this!</div>
+          <div class="feed-blog-preview">
+            <div class="feed-blog-img"><div class="feed-blog-img-placeholder" style="background:linear-gradient(135deg,#1a2a4a,#2a1a4a);color:#4f8ef7;font-size:13px;font-weight:600;">⚛️ React Performance Guide</div></div>
+            <div class="feed-blog-meta">
+              <div class="feed-blog-title">The Right Way to Use useMemo &amp; useCallback in React 2024</div>
+              <div class="feed-blog-desc">A complete guide to React performance optimization — when to use it, when not to, and real-world examples.</div>
+              <div class="feed-blog-source">forumpr.id/blog/rizky · 8 min read</div>
+            </div>
+          </div>
+          <div class="feed-actions">
+            <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>48</span></button>
+            <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>12</span></button>
+            <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+            <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+            <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-card-header">
+            <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=hendrakurniawan&backgroundColor=ffdfba" alt=""></div>
+            <div class="feed-meta"><div class="feed-name">Hendra Kurniawan</div><div class="feed-handle-time"><span>@hendrak</span> · 3h ago</div></div>
+            <button class="feed-more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+          </div>
+          <span class="feed-type-badge badge-blog"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Blog</span>
+          <div class="feed-content">Just wrote a long review of my new home office setup. Spent around 8 million but totally worth it for full-time WFH.</div>
+          <div class="feed-blog-preview">
+            <div class="feed-blog-img"><div class="feed-blog-img-placeholder" style="background:linear-gradient(135deg,#1a2e1a,#2e2a1a);color:#4ade80;font-size:13px;font-weight:600;">🖥️ Home Office Setup 2024</div></div>
+            <div class="feed-blog-meta">
+              <div class="feed-blog-title">Home Office Setup on 8 Million Budget — Worth It?</div>
+              <div class="feed-blog-desc">Full review of ultrawide monitor, electric desk, ergonomic chair, and WFH accessories.</div>
+              <div class="feed-blog-source">forumpr.id/blog/hendra · 12 min read</div>
+            </div>
+          </div>
+          <div class="feed-actions">
+            <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>76</span></button>
+            <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>19</span></button>
+            <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+            <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+            <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-card-header">
+            <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=rimasantoso&backgroundColor=d1f4cc" alt=""></div>
+            <div class="feed-meta"><div class="feed-name">Rima Santoso</div><div class="feed-handle-time"><span>@rimasantoso</span> · 5h ago</div></div>
+            <button class="feed-more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+          </div>
+          <span class="feed-type-badge badge-blog"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Blog</span>
+          <div class="feed-content">Honest review of Elden Ring DLC after 40 hours of playtime. Totally worth it but there are a few things that are genuinely frustrating.</div>
+          <div class="feed-blog-preview">
+            <div class="feed-blog-img"><div class="feed-blog-img-placeholder" style="background:linear-gradient(135deg,#2a1a1a,#1a1a2a);color:#c084fc;font-size:13px;font-weight:600;">🎮 Elden Ring DLC Review</div></div>
+            <div class="feed-blog-meta">
+              <div class="feed-blog-title">Elden Ring: Shadow of the Erdtree — 40 Hour Review</div>
+              <div class="feed-blog-desc">Honest review of the most anticipated DLC of 2024. Graphics, gameplay, lore — all covered in full.</div>
+              <div class="feed-blog-source">forumpr.id/blog/rima · 15 min read</div>
+            </div>
+          </div>
+          <div class="feed-actions">
+            <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>93</span></button>
+            <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>28</span></button>
+            <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+            <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+            <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB UPDATES -->
+      <div id="tab-updates" style="display:none">
+        <div class="side-card" style="border-radius:10px;overflow:hidden;">
+          <div class="side-card-header" style="font-size:11px;">Recent Notifications</div>
+          <div style="display:flex;flex-direction:column;">
+
+            <!-- NOTIF 1: LIKE (hati) — background merah gelap -->
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4a1e2a,#6a1e3a);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;color:var(--text-primary);margin-bottom:2px;"><strong>Rizky Fauzi</strong> liked your post</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Next.js deployment guide to VPS using Nginx...</div>
+                <div style="font-size:10px;color:var(--text-muted);">2 minutes ago</div>
+              </div>
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px;"></div>
+            </div>
+
+            <!-- NOTIF 2: REPLY (chat) -->
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1e3a2a,#2a4a3a);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;color:var(--text-primary);margin-bottom:2px;"><strong>Hendra Kurniawan</strong> replied to your comment</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">"Totally agree! Bun is fast but still has some compatibility issues..."</div>
+                <div style="font-size:10px;color:var(--text-muted);">14 minutes ago</div>
+              </div>
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:4px;"></div>
+            </div>
+
+            <!-- NOTIF 3: PIN -->
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#3a1e3a,#4a2a4a);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#c084fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 00-1.11-1.79l-1.78-.9A2 2 0 0115 10.76V6h1a2 2 0 000-4H8a2 2 0 000 4h1v4.76a2 2 0 01-1.11 1.79l-1.78.9A2 2 0 005 15.24V17z"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;color:var(--text-primary);margin-bottom:2px;"><strong>ForumPR Team</strong> pinned your post</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Next.js deployment guide to VPS using Nginx + PM2...</div>
+                <div style="font-size:10px;color:var(--text-muted);">1 hour ago</div>
+              </div>
+            </div>
+
+            <!-- NOTIF 4: FOLLOW -->
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1a2a5a,#2a3a6a);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;color:var(--text-primary);margin-bottom:2px;"><strong>Rima Santoso</strong> started following you</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">@rimasantoso · 482 followers</div>
+                <div style="font-size:10px;color:var(--text-muted);">2 hours ago</div>
+              </div>
+            </div>
+
+            <!-- NOTIF 5: BADGE -->
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2a2a1a,#3a3a1a);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#facc15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="18" width="12" height="4"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;color:var(--text-primary);margin-bottom:2px;">You earned the <strong>Top Contributor 2024</strong> badge</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Congrats! Your posts reached 1000+ likes this year.</div>
+                <div style="font-size:10px;color:var(--text-muted);">5 hours ago</div>
+              </div>
+            </div>
+
+            <!-- NOTIF 6: LIKE BANYAK (hati) — background merah gelap -->
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4a1e2a,#6a1e3a);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;color:var(--text-primary);margin-bottom:2px;"><strong>Andi Kurniawan</strong> and <strong>12 others</strong> liked your post</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Anyone ever tried Bun as a Node.js replacement...</div>
+                <div style="font-size:10px;color:var(--text-muted);">Yesterday, 22:14</div>
+              </div>
+            </div>
+
+            <!-- NOTIF 7: SYSTEM -->
+            <div style="display:flex;align-items:flex-start;gap:12px;padding:13px 16px;cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1e2a3a,#2a3a4a);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#94a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;color:var(--text-primary);margin-bottom:2px;"><strong>Forum Update v2.4.0</strong> is now available</div>
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Dark mode, real-time notifications, markdown editor and more.</div>
+                <div style="font-size:10px;color:var(--text-muted);">Yesterday, 17:42</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB MESSAGES -->
+      <div id="tab-messages" style="display:none">
+        <div class="side-card" style="border-radius:10px;overflow:hidden;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border);">
+            <span style="font-size:10px;font-weight:600;color:var(--text-muted);letter-spacing:0.8px;text-transform:uppercase;">Messages</span>
+            <button style="display:flex;align-items:center;gap:4px;padding:4px 10px;background:var(--post-btn);color:#fff;border-radius:6px;font-size:11px;font-weight:600;border:none;cursor:pointer;">
+              <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              New
+            </button>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="position:relative;flex-shrink:0;">
+                <div class="feed-avatar" style="width:42px;height:42px;"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=rizkyfauzi&backgroundColor=c0aede" alt=""></div>
+                <div style="position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:var(--online);border:2px solid var(--bg-card);"></div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:3px;">Rizky Fauzi</div>
+                <div style="font-size:12px;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;">Bro, have you tried Next.js 15 yet?</div>
+              </div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;">2 minutes ago</div>
+              <div style="width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="position:relative;flex-shrink:0;">
+                <div class="feed-avatar" style="width:42px;height:42px;"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=rimasantoso&backgroundColor=d1f4cc" alt=""></div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:3px;">Rima Santoso</div>
+                <div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Thanks for helping me out yesterday!</div>
+              </div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;">1 hour ago</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="position:relative;flex-shrink:0;">
+                <div class="feed-avatar" style="width:42px;height:42px;"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=hendrakurniawan&backgroundColor=ffdfba" alt=""></div>
+                <div style="position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:var(--online);border:2px solid var(--bg-card);"></div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:3px;">Hendra Kurniawan</div>
+                <div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">When are you deploying to production? Would love to see it</div>
+              </div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;">3 hours ago</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="position:relative;flex-shrink:0;">
+                <div class="feed-avatar" style="width:42px;height:42px;"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=forumprteam&backgroundColor=ffd5dc" alt=""></div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:3px;">ForumPR Team <span style="font-size:10px;color:var(--accent);background:var(--badge-bg);padding:1px 5px;border-radius:3px;margin-left:3px;">OFFICIAL</span></div>
+                <div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Congrats! Your account has been verified ✓</div>
+              </div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;">1 hour ago</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="position:relative;flex-shrink:0;">
+                <div class="feed-avatar" style="width:42px;height:42px;"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=andiwijaya&backgroundColor=b6e3f4" alt=""></div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:3px;">Andi Wijaya</div>
+                <div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Can you share the link to that Docker article?</div>
+              </div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Yesterday</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;transition:background var(--transition);" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background=''">
+              <div style="position:relative;flex-shrink:0;">
+                <div class="feed-avatar" style="width:42px;height:42px;"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=larasdevita&backgroundColor=ffd5dc" alt=""></div>
+              </div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:3px;">Laras Devita</div>
+                <div style="font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">You: Sure, I'll send it over!</div>
+              </div><div style="font-size:10px;color:var(--text-muted);margin-top:4px;">2 days ago</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-home -->
+
+    <!-- ===== PAGE FORUM ===== -->
+    <div class="page-section" id="page-forum">
+      <div class="banner-slider" id="bannerSlider">
+        <div class="banner-track" id="bannerTrack">
+          <div class="banner-slide" style="background:linear-gradient(135deg,#0f2a4a 0%,#1a3a6a 50%,#0a1a3a 100%)">
+            <div class="banner-content">
+              <div class="banner-tag">🔥 Trending</div>
+              <div class="banner-title">Welcome to ForumPR</div>
+              <div class="banner-desc">A place to discuss, share, and connect with the community.</div>
+              <button class="banner-cta">Explore Now</button>
+            </div>
+            <div class="banner-deco">🌐</div>
+          </div>
+          <div class="banner-slide" style="background:linear-gradient(135deg,#1a0f3a 0%,#3a1a6a 50%,#2a0f4a 100%)">
+            <div class="banner-content">
+              <div class="banner-tag">🎬 New</div>
+              <div class="banner-title">Forum Movie — Now Open</div>
+              <div class="banner-desc">Discuss your favorite series &amp; films. The Scandal thread is now active!</div>
+              <button class="banner-cta" onclick="openPage('movie-list')">Go to Movie</button>
+            </div>
+            <div class="banner-deco">🎥</div>
+          </div>
+          <div class="banner-slide" style="background:linear-gradient(135deg,#0a2a1a 0%,#0f4a2a 50%,#0a3a1a 100%)">
+            <div class="banner-content">
+              <div class="banner-tag">📢 Update</div>
+              <div class="banner-title">Forum Update v2.4.0 Live!</div>
+              <div class="banner-desc">Dark mode, real-time notifications, and markdown editor are now available.</div>
+              <button class="banner-cta">Read More</button>
+            </div>
+            <div class="banner-deco">🚀</div>
+          </div>
+        </div>
+        <button class="banner-arrow banner-prev" onclick="bannerMove(-1)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="banner-arrow banner-next" onclick="bannerMove(1)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="banner-dots" id="bannerDots">
+          <span class="banner-dot active" onclick="bannerGo(0)"></span>
+          <span class="banner-dot" onclick="bannerGo(1)"></span>
+          <span class="banner-dot" onclick="bannerGo(2)"></span>
+        </div>
+      </div>
+
+      <div class="forum-table">
+        <div class="forum-section-head">
+          <div class="fsh-label">Official</div>
+          <div class="fsh-col">Replies</div>
+          <div class="fsh-col">Views</div>
+          <div class="fsh-col right">Last Post</div>
+        </div>
+        <div class="forum-row">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title">Announcements</span></div>
+              <div class="forum-pages-row">
+                <span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+                <span class="page-btn active-page">1</span><span class="page-dots">…</span>
+                <span class="page-btn">4</span><span class="page-btn">5</span><span class="page-btn">6</span>
+              </div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">234</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">18,402</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">ForumPR Team</span></div><div class="lp-date">Today, 17:42</div></div>
+        </div>
+      </div>
+
+      <div class="forum-table">
+        <div class="forum-section-head">
+          <div class="fsh-label">General</div>
+          <div class="fsh-col">Replies</div>
+          <div class="fsh-col">Views</div>
+          <div class="fsh-col right">Last Post</div>
+        </div>
+        <div class="forum-row">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title">General Discussion</span></div>
+              <div class="forum-pages-row">
+                <span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+                <span class="page-btn active-page">1</span><span class="page-dots">…</span>
+                <span class="page-btn">22</span><span class="page-btn">23</span><span class="page-btn">24</span>
+              </div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">1,204</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">94,317</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">Budi P.</span></div><div class="lp-date">Today, 17:55</div></div>
+        </div>
+        <div class="forum-row">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title">Q&amp;A</span></div>
+              <div class="forum-pages-row">
+                <span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+                <span class="page-btn active-page">1</span><span class="page-dots">…</span>
+                <span class="page-btn">30</span><span class="page-btn">31</span><span class="page-btn">32</span>
+              </div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">1,561</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">112,089</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">Hendra K.</span></div><div class="lp-date">Today, 17:23</div></div>
+        </div>
+      </div>
+
+      <div class="forum-table">
+        <div class="forum-section-head">
+          <div class="fsh-label">Interests</div>
+          <div class="fsh-col">Replies</div>
+          <div class="fsh-col">Views</div>
+          <div class="fsh-col right">Last Post</div>
+        </div>
+        <div class="forum-row">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title">Technology &amp; Dev</span></div>
+              <div class="forum-pages-row">
+                <span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+                <span class="page-btn active-page">1</span><span class="page-dots">…</span>
+                <span class="page-btn">17</span><span class="page-btn">18</span><span class="page-btn">19</span>
+              </div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">892</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">67,540</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">Rizky F.</span></div><div class="lp-date">Today, 16:48</div></div>
+        </div>
+        <div class="forum-row" onclick="openPage('movie-list')">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title">Movie</span><span class="blue-dot blink"></span></div>
+              <div class="forum-pages-row">
+                <span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+                <span class="page-btn active-page">1</span><span class="page-dots">…</span>
+                <span class="page-btn">11</span><span class="page-btn">12</span><span class="page-btn">13</span>
+              </div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">745</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">53,218</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">Rima S.</span></div><div class="lp-date">Today, 16:10</div></div>
+        </div>
+      </div>
+
+      <div class="pagination-bar" style="justify-content:flex-end;">
+        <button class="jump-dropdown">Jump to <svg viewBox="0 0 24 24" class="chevron-down"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <button class="pag-btn active">1</button>
+        <button class="pag-btn">2</button>
+        <span style="color:var(--text-muted);font-size:13px;padding:0 2px">···</span>
+        <button class="pag-btn">3</button>
+      </div>
+    </div><!-- /page-forum -->
+
+    <!-- ===== PAGE MOVIE LIST ===== -->
+    <div class="page-section" id="page-movie-list">
+      <div class="breadcrumb">
+        <button class="bc-btn" onclick="openPage('forum')"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Forum</button>
+        <span class="bc-sep">›</span><span class="bc-cur">Movie</span>
+      </div>
+      <div class="thread-topbar">
+        <button class="new-topic-btn" onclick="alert('New Topic clicked!')">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          New Topic
+        </button>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button class="jump-dropdown">Jump to <svg viewBox="0 0 24 24" class="chevron-down"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <button class="pag-btn active">1</button><button class="pag-btn">2</button><button class="pag-btn">3</button><button class="pag-btn">4</button><button class="pag-btn">5</button>
+          <span style="color:var(--text-muted);font-size:13px;padding:0 2px">···</span>
+          <button class="pag-btn">102</button>
+        </div>
+      </div>
+      <div class="forum-table">
+        <div class="forum-section-head">
+          <div class="fsh-label">Movie</div><div class="fsh-col">Replies</div><div class="fsh-col">Views</div><div class="fsh-col right">Last Post</div>
+        </div>
+        <div class="forum-row" onclick="openPage('scandal-thread')">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title">Scandal</span><span class="blue-dot blink"></span></div>
+              <div class="forum-pages-row"><span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span><span class="page-btn active-page">1</span><span class="page-dots">…</span><span class="page-btn">3</span><span class="page-btn">4</span><span class="page-btn">5</span></div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">312</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">28,540</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">Rima S.</span></div><div class="lp-date">Today, 16:10</div></div>
+        </div>
+        <div class="forum-row">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title" style="color:var(--text-primary)">Grey's Anatomy</span></div>
+              <div class="forum-pages-row"><span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span><span class="page-btn active-page">1</span><span class="page-dots">…</span><span class="page-btn">8</span><span class="page-btn">9</span><span class="page-btn">10</span></div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">541</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">41,220</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">Sari W.</span></div><div class="lp-date">Yesterday, 21:05</div></div>
+        </div>
+        <div class="forum-row">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title" style="color:var(--text-primary)">Breaking Bad</span></div>
+              <div class="forum-pages-row"><span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span><span class="page-btn active-page">1</span><span class="page-dots">…</span><span class="page-btn">14</span><span class="page-btn">15</span><span class="page-btn">16</span></div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">889</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">76,880</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">Deni P.</span></div><div class="lp-date">Yesterday, 18:33</div></div>
+        </div>
+        <div class="forum-row">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title" style="color:var(--text-primary)">The Crown</span></div>
+              <div class="forum-pages-row"><span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span><span class="page-btn active-page">1</span><span class="page-dots">…</span><span class="page-btn">5</span><span class="page-btn">6</span><span class="page-btn">7</span></div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">274</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">19,450</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">Mega R.</span></div><div class="lp-date">2 days ago</div></div>
+        </div>
+        <div class="forum-row">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title" style="color:var(--text-primary)">Suits</span></div>
+              <div class="forum-pages-row"><span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span><span class="page-btn active-page">1</span><span class="page-dots">…</span><span class="page-btn">6</span><span class="page-btn">7</span><span class="page-btn">8</span></div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">398</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">33,710</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">Andi K.</span></div><div class="lp-date">2 days ago</div></div>
+        </div>
+        <div class="forum-row">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title" style="color:var(--text-primary)">Squid Game</span></div>
+              <div class="forum-pages-row"><span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span><span class="page-btn active-page">1</span><span class="page-dots">…</span><span class="page-btn">11</span><span class="page-btn">12</span><span class="page-btn">13</span></div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">712</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">58,990</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">Tita F.</span></div><div class="lp-date">3 days ago</div></div>
+        </div>
+        <div class="forum-row">
+          <div class="forum-topic-cell">
+            <div class="forum-icon"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+            <div class="forum-topic-body">
+              <div class="forum-title-row"><span class="forum-title" style="color:var(--text-primary)">Wednesday</span></div>
+              <div class="forum-pages-row"><span class="jump-link" style="min-width:20px;padding:0 5px;"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span><span class="page-btn active-page">1</span><span class="page-dots">…</span><span class="page-btn">4</span><span class="page-btn">5</span><span class="page-btn">6</span></div>
+            </div>
+          </div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">193</div></div>
+          <div class="forum-stat-cell"><div class="forum-stat-num">15,620</div></div>
+          <div class="forum-lastpost-cell"><div class="lp-by">by <span class="lp-name">Laras D.</span></div><div class="lp-date">4 days ago</div></div>
+        </div>
+      </div>
+    </div><!-- /page-movie-list -->
+
+    <!-- ===== PAGE SCANDAL THREAD ===== -->
+    <div class="page-section" id="page-scandal-thread">
+      <div class="breadcrumb">
+        <button class="bc-btn" onclick="openPage('forum')">Forum</button>
+        <span class="bc-sep">›</span>
+        <button class="bc-btn" onclick="openPage('movie-list')">Movie</button>
+        <span class="bc-sep">›</span>
+        <span class="bc-cur">Scandal</span>
+      </div>
+      <div class="post-box" style="margin-top:12px;">
+        <input type="text" class="post-input" placeholder="What's on your mind?">
+        <div class="post-actions">
+          <button class="post-action-btn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Image</button>
+          <button class="post-action-btn"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Poll</button>
+          <button class="post-action-btn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>More</button>
+          <button class="post-submit">Post</button>
+        </div>
+      </div>
+      <div class="feed-tabs" style="margin-top:10px">
+        <div class="season-tab active" onclick="switchSeason(this)">Season 1</div>
+        <div class="season-tab" onclick="switchSeason(this)">Season 2</div>
+        <div class="season-tab" onclick="switchSeason(this)">Season 3</div>
+        <div class="season-tab" onclick="switchSeason(this)">Season 4</div>
+      </div>
+      <div class="feed-card">
+        <div class="feed-card-header">
+          <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=rimasantoso&backgroundColor=d1f4cc" alt=""></div>
+          <div class="feed-meta"><div class="feed-name">Rima Santoso</div><div class="feed-handle-time"><span>@rimasantoso</span> · 2h ago</div></div>
+          <button class="feed-more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+        </div>
+        <span class="feed-type-badge badge-discussion"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg> Discussion</span>
+        <div class="feed-content">Just finished watching Scandal Season 1 and I am speechless. The chemistry between Olivia Pope and Fitz is... intense and complicated at the same time. Has anyone watched up to the Season 1 finale?</div>
+        <div class="feed-actions">
+          <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>84</span></button>
+          <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>31</span></button>
+          <button class="feed-action"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>8</span></button>
+          <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+          <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+        </div>
+      </div>
+      <div class="feed-card">
+        <div class="feed-card-header">
+          <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=hendrakurniawan&backgroundColor=ffdfba" alt=""></div>
+          <div class="feed-meta"><div class="feed-name">Hendra Kurniawan</div><div class="feed-handle-time"><span>@hendrak</span> · 5h ago</div></div>
+          <button class="feed-more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+        </div>
+        <span class="feed-type-badge badge-blog"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Review</span>
+        <div class="feed-content">Episode 7 Season 1 is the craziest turning point in my opinion. The plot is truly unpredictable and every character starts revealing their true intentions. Where are my fellow Gladiators 🔥</div>
+        <div class="feed-blog-preview">
+          <div class="feed-blog-img"><div class="feed-blog-img-placeholder" style="background:linear-gradient(135deg,#2a1a1a,#1a1a2a);color:#f472b6;font-size:13px;font-weight:600;">🎭 Scandal S1 — Episode Review</div></div>
+          <div class="feed-blog-meta">
+            <div class="feed-blog-title">Scandal S1 Ep.7 — The Point of No Return</div>
+            <div class="feed-blog-desc">Detailed breakdown of the hottest episode in Season 1. Spoiler alert! Olivia Pope makes a decision that changes everything.</div>
+            <div class="feed-blog-source">forumpr.id/blog/hendra · 6 min read</div>
+          </div>
+        </div>
+        <div class="feed-actions">
+          <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>57</span></button>
+          <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>14</span></button>
+          <button class="feed-action"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>4</span></button>
+          <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+          <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+        </div>
+      </div>
+      <div class="feed-card">
+        <div class="feed-card-header">
+          <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=rizkyfauzi&backgroundColor=c0aede" alt=""></div>
+          <div class="feed-meta"><div class="feed-name">Rizky Fauzi</div><div class="feed-handle-time"><span>@rizkyfauzi</span> · 8h ago</div></div>
+          <button class="feed-more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+        </div>
+        <span class="feed-type-badge badge-update"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Poll</span>
+        <div class="feed-content">Who is your favorite character in Season 1? Personally I am team Olivia Pope all the way but Cyrus Beene is also super underrated.</div>
+        <div class="feed-actions">
+          <button class="feed-action liked" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>103</span></button>
+          <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>47</span></button>
+          <button class="feed-action"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>12</span></button>
+          <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+        </div>
+      </div>
+    </div><!-- /page-scandal-thread -->
+
+    <!-- ===== PAGE PROFILE ===== -->
+    <div class="page-section" id="page-profile">
+      <div class="profile-main-card">
+        <div class="profile-cover">
+          <div class="profile-cover-pattern"></div>
+          <div class="profile-cover-emoji">👨‍💻</div>
+        </div>
+        <div class="profile-identity">
+          <div style="position:relative;display:inline-block;">
+            <div class="profile-big-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=budiprasetyo&backgroundColor=b6e3f4" alt=""></div>
+            <div class="profile-big-online"></div>
+          </div>
+          <div class="profile-top-row">
+            <div>
+              <div class="profile-big-name">Budi Prasetyo</div>
+              <div class="profile-big-handle">@budiprasetyo · Online now</div>
+            </div>
+            <button class="profile-edit-btn">
+              <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Edit Profile
+            </button>
+          </div>
+          <div class="profile-badges-row">
+            <span class="pbadge pbadge-admin"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Administrator</span>
+            <span class="pbadge pbadge-verified"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>
+            <span class="pbadge pbadge-dev"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg> Developer</span>
+
+          </div>
+          <div class="profile-bio-text">Web developer & forum enthusiast. Suka ngoprek React, Node.js, dan segala hal yang berbau open source. Jakarta based 🇮🇩</div>
+          <div class="profile-meta-row">
+            <span class="profile-meta-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Jakarta, Indonesia</span>
+            <span class="profile-meta-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Joined Jan 10, 2020</span>
+            <span class="profile-meta-item"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>forumpr.id/u/budiprasetyo</span>
+          </div>
+          <div class="profile-follow-row">
+            <div class="pf-stat"><span class="pf-num">1,234</span><span class="pf-label">Posts</span></div>
+            <div class="pf-divider"></div>
+            <div class="pf-stat"><span class="pf-num">8,567</span><span class="pf-label">Rep</span></div>
+            <div class="pf-divider"></div>
+            <div class="pf-stat"><span class="pf-num">482</span><span class="pf-label">Followers</span></div>
+            <div class="pf-divider"></div>
+            <div class="pf-stat"><span class="pf-num">139</span><span class="pf-label">Following</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="profile-strip">
+        <div class="pstrip-item"><div class="pstrip-val">6</div><div class="pstrip-lbl">Years Active</div></div>
+        <div class="pstrip-item"><div class="pstrip-val">47</div><div class="pstrip-lbl">Threads</div></div>
+        <div class="pstrip-item"><div class="pstrip-val">312</div><div class="pstrip-lbl">Likes Given</div></div>
+        <div class="pstrip-item"><div class="pstrip-val">98%</div><div class="pstrip-lbl">Solve Rate</div></div>
+      </div>
+      <div class="profile-tabs">
+        <div class="profile-tab active" onclick="switchProfileTab(this,'ptab-posts')">Posts</div>
+        <div class="profile-tab" onclick="switchProfileTab(this,'ptab-badges')">Badge</div>
+        <div class="profile-tab" onclick="switchProfileTab(this,'ptab-likes')">Likes</div>
+        <div class="profile-tab" onclick="switchProfileTab(this,'ptab-bookmark')">Bookmark</div>
+      </div>
+      <div id="ptab-posts">
+        <div class="activity-card">
+          <div class="activity-title">Activity — Last 6 Months</div>
+          <div class="heatmap" id="heatmap"></div>
+        </div>
+        <div class="pinned-card">
+          <div class="pinned-label">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 00-1.11-1.79l-1.78-.9A2 2 0 0115 10.76V6h1a2 2 0 000-4H8a2 2 0 000 4h1v4.76a2 2 0 01-1.11 1.79l-1.78.9A2 2 0 005 15.24V17z"/></svg>
+            Pinned Post
+          </div>
+          <div class="feed-card" style="margin-bottom:0;border-radius:8px;">
+            <div class="feed-card-header">
+              <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=budiprasetyo&backgroundColor=b6e3f4" alt=""></div>
+              <div class="feed-meta"><div class="feed-name">Budi Prasetyo</div><div class="feed-handle-time"><span>@budiprasetyo</span> · Mar 12, 2024</div></div>
+            </div>
+            <span class="feed-type-badge badge-blog"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Blog</span>
+            <div class="feed-content">A complete guide to deploying Next.js to VPS using Nginx + PM2 + automatic SSL. Been using this in production for over 2 years and it is rock solid. Hope it helps!</div>
+            <div class="feed-actions">
+              <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>312</span></button>
+              <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>64</span></button>
+              <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+              <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+              <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-card-header">
+            <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=budiprasetyo&backgroundColor=b6e3f4" alt=""></div>
+            <div class="feed-meta"><div class="feed-name">Budi Prasetyo</div><div class="feed-handle-time"><span>@budiprasetyo</span> · 3h ago</div></div>
+            <button class="feed-more"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+          </div>
+          <span class="feed-type-badge badge-discussion"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Discussion</span>
+          <div class="feed-content">Has anyone tried Bun as a Node.js runtime replacement in production? My experience has been pretty positive speed-wise but some packages still have compatibility issues.</div>
+          <div class="feed-actions">
+            <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>44</span></button>
+            <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>18</span></button>
+            <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+            <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+            <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div id="ptab-likes" style="display:none">
+        <div class="feed-card">
+          <div class="feed-card-header">
+            <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=rizkyfauzi&backgroundColor=c0aede" alt=""></div>
+            <div class="feed-meta"><div class="feed-name">Rizky Fauzi</div><div class="feed-handle-time"><span>@rizkyfauzi</span> · 14 min ago</div></div>
+          </div>
+          <span class="feed-type-badge badge-blog"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Blog</span>
+          <div class="feed-content">The Right Way to Use useMemo &amp; useCallback in React 2024 — a complete guide you need to read.</div>
+          <div class="feed-actions">
+            <button class="feed-action liked" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>48</span></button>
+            <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>12</span></button>
+            <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+            <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+            <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-card-header">
+            <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=rimasantoso&backgroundColor=d1f4cc" alt=""></div>
+            <div class="feed-meta"><div class="feed-name">Rima Santoso</div><div class="feed-handle-time"><span>@rimasantoso</span> · 2h ago</div></div>
+          </div>
+          <span class="feed-type-badge badge-discussion"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg> Discussion</span>
+          <div class="feed-content">Guys, what do you think is the best open world game of 2024? I am torn between Elden Ring DLC and Black Myth: Wukong.</div>
+          <div class="feed-actions">
+            <button class="feed-action liked" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>31</span></button>
+            <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>24</span></button>
+            <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+            <button class="feed-action bookmark-btn" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+            <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div id="ptab-bookmark" style="display:none">
+        <div class="feed-card">
+          <div class="feed-card-header">
+            <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=hendrakurniawan&backgroundColor=ffdfba" alt=""></div>
+            <div class="feed-meta"><div class="feed-name">Hendra Kurniawan</div><div class="feed-handle-time"><span>@hendrak</span> · 3h ago</div></div>
+          </div>
+          <span class="feed-type-badge badge-blog"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Blog</span>
+          <div class="feed-content">Home Office Setup on 8 Million Budget — Worth It? Full review of ultrawide monitor, electric desk, and ergonomic chair.</div>
+          <div class="feed-actions">
+            <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>76</span></button>
+            <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+            <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>19</span></button>
+            <button class="feed-action bookmark-btn bookmarked" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="var(--accent)" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+            <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          </div>
+        </div>
+        <div class="feed-card">
+          <div class="feed-card-header">
+            <div class="feed-avatar"><img src="https://api.dicebear.com/8.x/notionists/svg?seed=forumprteam&backgroundColor=ffd5dc" alt=""></div>
+            <div class="feed-meta"><div class="feed-name">ForumPR Team <span style="font-size:10px;color:var(--accent);background:var(--badge-bg);padding:1px 6px;border-radius:4px;margin-left:4px;font-weight:600;">OFFICIAL</span></div><div class="feed-handle-time"><span>@forumprteam</span> · 1h ago</div></div>
+          </div>
+          <span class="feed-type-badge badge-update"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg> Update</span>
+          <div class="feed-content"><strong>Forum Update v2.4.0 is now live!</strong> Dark mode, real-time notifications, and markdown editor are now available.</div>
+          <div class="feed-actions">
+            <button class="feed-action" onclick="toggleLike(this)"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><span>204</span></button>
+            <button class="feed-action" onclick="toggleRepost(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg><span>0</span></button>
+            <button class="feed-action"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>37</span></button>
+            <button class="feed-action bookmark-btn bookmarked" onclick="toggleBookmark(this)"><svg viewBox="0 0 24 24" width="14" height="14" fill="var(--accent)" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></button>
+            <button class="feed-share" style="margin-left:auto"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div id="ptab-badges" style="display:none">
+        <div class="activity-card">
+          <div class="activity-title">Achievements</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:4px;">
+            <div style="background:var(--bg-input);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🏆</div><div style="font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">Top Contributor</div><div style="font-size:10px;color:var(--text-muted);">2023 & 2024</div></div>
+            <div style="background:var(--bg-input);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">⚡</div><div style="font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">Power User</div><div style="font-size:10px;color:var(--text-muted);">1000+ posts</div></div>
+            <div style="background:var(--bg-input);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🛡️</div><div style="font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">Moderator</div><div style="font-size:10px;color:var(--text-muted);">Since 2022</div></div>
+            <div style="background:var(--bg-input);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🔥</div><div style="font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">Streak Master</div><div style="font-size:10px;color:var(--text-muted);">180 days streak</div></div>
+            <div style="background:var(--bg-input);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">💡</div><div style="font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">Problem Solver</div><div style="font-size:10px;color:var(--text-muted);">50+ solutions</div></div>
+            <div style="background:var(--bg-input);border-radius:10px;padding:14px;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🌟</div><div style="font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:2px;">OG Member</div><div style="font-size:10px;color:var(--text-muted);">Since 2020</div></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-profile -->
+
+  </main>
+
+  <aside class="sidebar-right">
+    <div class="side-card">
+      <div class="side-card-header">Advertisement</div>
+      <div class="ad-box">300 × 200</div>
+    </div>
+    <div class="side-card" id="widget-trending-topics">
+      <div class="side-card-header">Trending Topics</div>
+      <div class="trending-list">
+        <div class="trending-item"><span class="trending-num">1</span><div class="trending-info"><div class="trending-tag">#ReactJS</div><div class="trending-count">234 posts</div></div></div>
+        <div class="trending-item"><span class="trending-num">2</span><div class="trending-info"><div class="trending-tag">#ForumUpdate</div><div class="trending-count">189 posts</div></div></div>
+        <div class="trending-item"><span class="trending-num">3</span><div class="trending-info"><div class="trending-tag">#Gaming2024</div><div class="trending-count">142 posts</div></div></div>
+        <div class="trending-item"><span class="trending-num">4</span><div class="trending-info"><div class="trending-tag">#HomeOffice</div><div class="trending-count">98 posts</div></div></div>
+        <div class="trending-item"><span class="trending-num">5</span><div class="trending-info"><div class="trending-tag">#WFH</div><div class="trending-count">76 posts</div></div></div>
+      </div>
+    </div>
+    <div class="side-card">
+      <div class="side-card-header">Forum Stats</div>
+      <div class="forum-stats-list">
+        <div class="fs-row"><span class="fs-label">Members</span><span class="fs-val">24,812</span></div>
+        <div class="fs-row"><span class="fs-label">Posts</span><span class="fs-val">187,430</span></div>
+        <div class="fs-row"><span class="fs-label">Topics</span><span class="fs-val">9,204</span></div>
+        <div class="fs-row"><span class="fs-label">Online</span><span class="fs-val online-val">138</span></div>
+      </div>
+    </div>
+    <div class="side-card">
+      <div class="side-card-header">Sponsored</div>
+      <div class="sponsored-box">300 × 340</div>
+    </div>
+  </aside>
+</div>
+
+<script>
+function switchHomeTab(tab, targetId) {
+  tab.closest('.feed-tabs').querySelectorAll('.feed-tab').forEach(function(t){ t.classList.remove('active'); });
+  tab.classList.add('active');
+  ['tab-all','tab-blogs','tab-updates','tab-messages'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.style.display = id === targetId ? 'block' : 'none';
+  });
+}
+function switchPage(page) {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+  var navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+  var pageEl = document.getElementById('page-' + page);
+  if (pageEl) pageEl.classList.add('active');
+  document.getElementById('widget-trending-topics').style.display = page === 'home' ? 'block' : 'none';
+}
+function openPage(page) {
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+  if (['forum','movie-list','scandal-thread'].includes(page)) {
+    document.getElementById('nav-forum').classList.add('active');
+  } else if (page === 'home') {
+    document.getElementById('nav-home').classList.add('active');
+  }
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('widget-trending-topics').style.display = 'none';
+  window.scrollTo(0, 0);
+}
+function switchSeason(tab) {
+  tab.closest('.feed-tabs').querySelectorAll('.season-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+}
+function toggleRepost(btn) {
+  var isActive = btn.classList.contains('reposted');
+  var countEl = btn.querySelector('span');
+  var count = parseInt(countEl.textContent);
+  btn.classList.toggle('reposted');
+  countEl.textContent = isActive ? count - 1 : count + 1;
+  btn.style.color = isActive ? '' : '#4ade80';
+}
+function toggleBookmark(btn) {
+  var isActive = btn.classList.contains('bookmarked');
+  btn.classList.toggle('bookmarked');
+  btn.querySelector('svg').style.fill = isActive ? 'none' : 'var(--accent)';
+  btn.querySelector('svg').style.stroke = isActive ? 'currentColor' : 'var(--accent)';
+}
+function toggleLike(btn) {
+  var isLiked = btn.classList.contains('liked');
+  var countEl = btn.querySelector('span');
+  var count = parseInt(countEl.textContent);
+  btn.classList.toggle('liked');
+  countEl.textContent = isLiked ? count - 1 : count + 1;
+}
+function toggleTheme() {
+  var html = document.documentElement;
+  var isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('moonIcon').style.display = isDark ? 'block' : 'none';
+  document.getElementById('sunIcon').style.display = isDark ? 'none' : 'block';
+}
+var bannerIndex = 0, bannerTotal = 3, bannerTimer;
+function bannerGo(idx) {
+  bannerIndex = idx;
+  document.getElementById('bannerTrack').style.transform = 'translateX(-' + (idx * 100) + '%)';
+  document.querySelectorAll('.banner-dot').forEach(function(d, i){ d.classList.toggle('active', i === idx); });
+}
+function bannerMove(dir) { bannerGo((bannerIndex + dir + bannerTotal) % bannerTotal); resetBannerTimer(); }
+function resetBannerTimer() { clearInterval(bannerTimer); bannerTimer = setInterval(function(){ bannerMove(1); }, 4000); }
+resetBannerTimer();
+function switchProfileTab(tab, targetId) {
+  tab.closest('.profile-tabs').querySelectorAll('.profile-tab').forEach(function(t){ t.classList.remove('active'); });
+  tab.classList.add('active');
+  ['ptab-posts','ptab-about','ptab-badges','ptab-likes','ptab-bookmark'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.style.display = id === targetId ? 'block' : 'none';
+  });
+}
+(function() {
+  var el = document.getElementById('heatmap');
+  if (!el) return;
+  var html = '';
+  for (var w = 0; w < 26; w++) {
+    html += '<div style="display:flex;flex-direction:column;gap:3px;">';
+    for (var d = 0; d < 7; d++) {
+      var lvl = Math.random();
+      var bg = lvl < 0.35 ? 'var(--bg-input)' : lvl < 0.55 ? '#1a2e5a' : lvl < 0.75 ? '#2a4a9a' : lvl < 0.9 ? '#4f8ef7' : '#7ab3ff';
+      html += '<div style="width:11px;height:11px;border-radius:2px;background:' + bg + '"></div>';
+    }
+    html += '</div>';
+  }
+  el.innerHTML = html;
+})();
+</script>
+</body>
+</html>
